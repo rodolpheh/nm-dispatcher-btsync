@@ -2,23 +2,34 @@
 INTERFACE=$1
 STATUS=$2
 
-restart_btsync() {
+# manage_btsync() take a username as input and manage
+# the Bittorrent Sync session for this user, based
+# on the connection state
+manage_btsync() {
     
-    USERNAME=$1
+  USERNAME=$1
     
-    if [[ "$INTERFACE" == "tun0" ]]; then
-        exec systemctl restart btsync@"$USERNAME"
-    else
-        case "$STATUS" in
-            'up') 
-                exec systemctl start btsync@"$USERNAME";;
-            'down') 
-                exec systemctl stop btsync@"$USERNAME";;
-        esac
-    fi
+  # If it's a VPN change...
+  if [[ "$INTERFACE" == "tun0" ]]; then
+    # ...restart the Bittorrent Sync service
+    exec systemctl restart btsync@"$USERNAME"
+    
+  # Else check the status of the interface
+  # and start/stop the Bittorrent Sync service
+  else
+    case "$STATUS" in
+      # If it's up, start the service
+      'up') exec systemctl start btsync@"$USERNAME";;
+      # If it's down, stop the service
+      'down') exec systemctl stop btsync@"$USERNAME";;
+    esac   
+  fi
+ 
 }
 
+# Get the names of users in btsync-users group
 getent passwd | while IFS=: read name trash
 do
-    groups "$name" | cut -f2 -d: | grep -q -w "btsync-users" && restart_btsync "$name"
+  # For each one, check a last time before calling manage_btsync() with username as input
+  groups "$name" | cut -f2 -d: | grep -q -w "btsync-users" && manage_btsync "$name"
 done
