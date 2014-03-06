@@ -1,10 +1,10 @@
 #!/bin/bash
-INTERFACE=$1 # Le nom de l'interface
-STATUS=$2 # Le statut
+INTERFACE=$1
+STATUS=$2
 
 restart_btsync() {
     
-    USERNAME=$1 # Nom de l'utilisateur
+    USERNAME=$1
     
     if [[ "$INTERFACE" == "tun0" ]]; then
         exec systemctl restart btsync@"$USERNAME"
