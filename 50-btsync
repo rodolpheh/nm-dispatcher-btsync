@@ -10,7 +10,7 @@ manage_btsync() {
   USERNAME=$1
     
   # If it's a VPN change...
-  if [[ "$INTERFACE" == "tun0" ]]; then
+  if [ "$(echo "$INTERFACE" | cut -c1-3)" == "tun" -o "$(echo "$INTERFACE" | cut -c1-3)" == "tap" ] ; then
     # ...restart the Bittorrent Sync service
     exec systemctl restart btsync@"$USERNAME"
     
