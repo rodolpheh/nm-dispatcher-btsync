@@ -9,7 +9,7 @@ manage_btsync() {
     
   USERNAME=$1
     
-  # If it's a VPN change...
+  # If it's a tunneling change...
   if [ "$(echo "$INTERFACE" | cut -c1-3)" == "tun" -o "$(echo "$INTERFACE" | cut -c1-3)" == "tap" ] ; then
     # ...restart the Bittorrent Sync service
     exec systemctl restart btsync@"$USERNAME"
@@ -27,7 +27,7 @@ manage_btsync() {
  
 }
 
-# Get the names of users in btsync-users group
+# Get names of users in btsync-users group
 getent passwd | while IFS=: read name trash
 do
   # For each one, check a last time before calling manage_btsync() with username as input
