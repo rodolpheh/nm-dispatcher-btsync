@@ -1,0 +1,24 @@
+#!/bin/bash
+INTERFACE=$1 # Le nom de l'interface
+STATUS=$2 # Le statut
+
+restart_btsync() {
+    
+    USERNAME=$1 # Nom de l'utilisateur
+    
+    if [[ "$INTERFACE" == "tun0" ]]; then
+        exec systemctl restart btsync@"$USERNAME"
+    else
+        case "$STATUS" in
+            'up') 
+                exec systemctl start btsync@"$USERNAME";;
+            'down') 
+                exec systemctl stop btsync@"$USERNAME";;
+        esac
+    fi
+}
+
+getent passwd | while IFS=: read name trash
+do
+    groups "$name" | cut -f2 -d: | grep -q -w "btsync-users" && restart_btsync "$name"
+done
