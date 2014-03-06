@@ -43,3 +43,12 @@ In order to start Bittorrent Sync service for your users, you must (in root):
 Replace *youruser* with the name of the user you want to add to the btsync-users group
 
 Reboot your computer. Now NetworkManager should takes care of Bittorrent Sync and starts the Bittorrent Sync sessions for every users you add in btsync-users group.
+
+### What can go wrong ?
+
+If NetworkManager don't call your VPN connection "tun0", the Bittorrent Sync service won't restart and you will lost your connections. Not a big deal since you can restart it by yourself by making (in root):
+```
+systemctl restart btsync@youruser
+```
+Replace *youruser* with your username.
+I will have a look at this (possible) issue.
