@@ -8,7 +8,7 @@ This script, used with NetworkManager-dispatcher service, manage the Bittorrent 
 This script:
 * Start Bittorrent Sync service when connection is up
 * Stop Bittorrent Sync service when connection is down
-* Restart Bittorrent Sync service when VPN connection change
+* Restart Bittorrent Sync service when there is a tunneling connection change
 
 ### How to install ?
 
@@ -44,11 +44,3 @@ Replace *youruser* with the name of the user you want to add to the btsync-users
 
 Reboot your computer. Now NetworkManager should takes care of Bittorrent Sync and starts the Bittorrent Sync sessions for every users you add in btsync-users group.
 
-### What can go wrong ?
-
-If NetworkManager don't call your VPN connection "tun0", the Bittorrent Sync service won't restart and you will lost your connections. Not a big deal since you can restart it by yourself by making (in root):
-```
-systemctl restart btsync@youruser
-```
-Replace *youruser* with your username.
-I will have a look at this (possible) issue.
