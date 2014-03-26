@@ -27,9 +27,10 @@ manage_btsync() {
  
 }
 
-# Get names of users in btsync-users group
+# Get list of users and for each one...
 getent passwd | while IFS=: read name trash
 do
-  # For each one, check a last time before calling manage_btsync() with username as input
+  # ... checks if user is in btsync-users group.
+  # If user is in btsync-users group, it calls manage_btsync() with username as input
   groups "$name" | cut -f2 -d: | grep -q -w "btsync-users" && manage_btsync "$name"
 done
